@@ -18,7 +18,7 @@ func NewMariaDBRepository(db *sql.DB) domain.Repository {
 
 func (rep mariaDBRepository) GetAll(ctx context.Context) ([]domain.Produtos, error) {
 	var produtosList []domain.Produtos = []domain.Produtos{}
-	rows, err := rep.db.QueryContext(ctx, sqlGetAll)
+	rows, err := rep.db.QueryContext(ctx, SqlGetAll)
 	if err != nil {
 		return produtosList, err
 	}
@@ -38,7 +38,7 @@ func (rep mariaDBRepository) GetAll(ctx context.Context) ([]domain.Produtos, err
 
 func (rep mariaDBRepository) GetOne(id int) (domain.Produtos, error) {
 	var produto domain.Produtos
-	stmt := rep.db.QueryRow(sqlGetOne, id)
+	stmt := rep.db.QueryRow(SqlGetOne, id)
 
 	err := stmt.Scan(
 		&produto.ID,
@@ -54,7 +54,7 @@ func (rep mariaDBRepository) GetOne(id int) (domain.Produtos, error) {
 }
 
 func (rep *mariaDBRepository) Store(produto domain.Produtos) (domain.Produtos, error) {
-	stmt, err := rep.db.Prepare(sqlStore)
+	stmt, err := rep.db.Prepare(SqlStore)
 	if err != nil {
 		return produto, err
 	}
@@ -81,7 +81,7 @@ func (rep *mariaDBRepository) Store(produto domain.Produtos) (domain.Produtos, e
 }
 
 func (rep *mariaDBRepository) Update(produto domain.Produtos) (domain.Produtos, error) {
-	stmt, err := rep.db.Prepare(sqlUpdate)
+	stmt, err := rep.db.Prepare(SqlUpdate)
 	if err != nil {
 		return produto, err
 	}
@@ -103,7 +103,7 @@ func (rep *mariaDBRepository) Update(produto domain.Produtos) (domain.Produtos, 
 }
 
 func (rep *mariaDBRepository) UpdateName(id int, name string) (string, error) {
-	stmt, err := rep.db.Prepare(sqlUpdateName)
+	stmt, err := rep.db.Prepare(SqlUpdateName)
 	if err != nil {
 		return name, err
 	}
@@ -119,7 +119,7 @@ func (rep *mariaDBRepository) UpdateName(id int, name string) (string, error) {
 }
 
 func (rep *mariaDBRepository) Delete(id int) error {
-	result, err := rep.db.Exec(sqlDelete, id)
+	result, err := rep.db.Exec(SqlDelete, id)
 	if err != nil {
 		return err
 	}

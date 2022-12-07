@@ -15,10 +15,7 @@ type service struct {
 }
 
 func NewService(repository domain.Repository) domain.Service {
-	service := service{
-		repository: repository,
-	}
-	return &service
+	return &service{repository: repository}
 }
 
 func (s service) GetAll(ctx context.Context) ([]domain.Produtos, error) {

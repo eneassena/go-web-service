@@ -38,7 +38,7 @@ var pdRequest = domain.ProdutoRequest{
 }
 
 func TestServiceGetAll(t *testing.T) {
-	mockRep := new(mocks.ProductRepository)
+	mockRep := new(mocks.Repository)
 
 	t.Run("test de integração service e repository, metodo GetAll, caso de sucesso", func(t *testing.T) {
 		mockRep.On("GetAll", mock.Anything).
@@ -77,7 +77,7 @@ func TestServiceGetAll(t *testing.T) {
 }
 
 func TestServiceGetOne(t *testing.T) {
-	mockRep := new(mocks.ProductRepository)
+	mockRep := new(mocks.Repository)
 
 	searchProduct := domain.Produtos{
 		ID:    1,
@@ -122,7 +122,7 @@ func TestServiceGetOne(t *testing.T) {
 }
 
 func TestServiceStore(t *testing.T) {
-	mockRep := new(mocks.ProductRepository)
+	mockRep := new(mocks.Repository)
 
 	t.Run("test de integração service e repository, caso de sucesso", func(t *testing.T) {
 		newProduct := domain.Produtos{

@@ -7,6 +7,9 @@ import (
 
 	"web-service-gin/cmd/server/docs"
 	productController "web-service-gin/internal/products/controller"
+	"web-service-gin/internal/products/infra"
+	productRepository "web-service-gin/internal/products/repository/mariadb"
+	productService "web-service-gin/internal/products/service"
 
 	"github.com/gin-gonic/gin"
 
@@ -37,9 +40,17 @@ func main() {
 		log.Fatal(err)
 	}
 	router := gin.Default()
-	productController.NewProduto(router)
+
+	rep := productRepository.NewMariaDBRepository(infra.Connect())
+	service := productService.NewService(rep)
+
+	productController.NewProduto(router, service)
+
 	docs.SwaggerInfo.Host = fmt.Sprintf("%s:%s", os.Getenv("HOST_SERVER"), os.Getenv("PORT_SERVER"))
+
 	docs.SwaggerInfo.BasePath = "/api/v1"
+
 	router.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	router.Run(":" + os.Getenv("PORT_SERVER"))
 }

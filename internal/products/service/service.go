@@ -15,10 +15,7 @@ type service struct {
 }
 
 func NewService(repository domain.Repository) domain.Service {
-	service := service{
-		repository: repository,
-	}
-	return &service
+	return &service{repository: repository}
 }
 
 func (s service) GetAll(ctx context.Context) ([]domain.Produtos, error) {
@@ -37,48 +34,52 @@ func (s *service) GetOne(id int) (domain.Produtos, error) {
 	return produto, nil
 }
 
-func (s *service) Store(
-	name string,
-	produtoType string,
-	count int,
-	price float64,
-) (domain.Produtos, error) {
-	newProduto, err := s.repository.Store(0, name, produtoType, count, price)
+func (s *service) Store(produto domain.ProdutoRequest) (domain.Produtos, error) {
+	var prod domain.Produtos = domain.Produtos{
+		Name:  produto.Name,
+		Type:  produto.Type,
+		Count: produto.Count,
+		Price: produto.Price,
+	}
+
+	newProduto, err := s.repository.Store(prod)
 	if err != nil {
-		return domain.Produtos{}, fmt.Errorf("error: falha ao registra um novo produto, %w", err)
+		messageErr := fmt.Errorf("error: falha ao registra um novo produto, %w", err)
+		return newProduto, messageErr
 	}
 	return newProduto, nil
 }
 
-func (s *service) UpdateName(id int, name string) (domain.Produtos, error) {
+func (s *service) UpdateName(id int, name string) (string, error) {
 	if ok, err := productExists(s, id); !ok {
-		return domain.Produtos{}, err
+		return name, err
 	}
 	produto, err := s.repository.UpdateName(id, name)
 	if err != nil {
-		return domain.Produtos{}, err
+		return name, err
 	}
 	return produto, nil
 }
 
-func (s *service) Update(
-	id int,
-	name string,
-	produtoType string,
-	count int,
-	price float64,
-) (domain.Produtos, error) {
+func (s *service) Update(id int, produto domain.ProdutoRequest) (domain.Produtos, error) {
+	var prod domain.Produtos = domain.Produtos{
+		ID:    id,
+		Name:  produto.Name,
+		Type:  produto.Type,
+		Count: produto.Count,
+		Price: produto.Price,
+	}
+
 	if ok, err := productExists(s, id); !ok {
-		return domain.Produtos{}, err
+		return prod, err
 	}
 
-	produto, err := s.repository.Update(id, name, produtoType, count, price)
+	produt, err := s.repository.Update(prod)
 	if err != nil {
-		return produto, err
+		return produt, err
 	}
 
-	fmt.Println(produto, err)
-	return produto, nil
+	return produt, nil
 }
 
 func (s *service) Delete(id int) error {

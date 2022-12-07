@@ -30,8 +30,15 @@ var productsList []domain.Produtos = []domain.Produtos{
 	},
 }
 
+var pdRequest = domain.ProdutoRequest{
+	Name:  productsList[0].Name,
+	Type:  productsList[0].Type,
+	Count: productsList[0].Count,
+	Price: productsList[0].Price,
+}
+
 func TestServiceGetAll(t *testing.T) {
-	mockRep := new(mocks.ProductRepository)
+	mockRep := new(mocks.Repository)
 
 	t.Run("test de integração service e repository, metodo GetAll, caso de sucesso", func(t *testing.T) {
 		mockRep.On("GetAll", mock.Anything).
@@ -70,7 +77,7 @@ func TestServiceGetAll(t *testing.T) {
 }
 
 func TestServiceGetOne(t *testing.T) {
-	mockRep := new(mocks.ProductRepository)
+	mockRep := new(mocks.Repository)
 
 	searchProduct := domain.Produtos{
 		ID:    1,
@@ -115,7 +122,7 @@ func TestServiceGetOne(t *testing.T) {
 }
 
 func TestServiceStore(t *testing.T) {
-	mockRep := new(mocks.ProductRepository)
+	mockRep := new(mocks.Repository)
 
 	t.Run("test de integração service e repository, caso de sucesso", func(t *testing.T) {
 		newProduct := domain.Produtos{
@@ -125,25 +132,15 @@ func TestServiceStore(t *testing.T) {
 			Count: 1,
 			Price: 645.445,
 		}
-		mockRep.On("LastID").Return(1, nil).Once()
 		mockRep.On("Store",
-			mock.AnythingOfType("int"),
-			mock.AnythingOfType("string"),
-			mock.AnythingOfType("string"),
-			mock.AnythingOfType("int"),
-			mock.AnythingOfType("float64"),
+			mock.AnythingOfType("domain.Produtos"),
 		).
 			Return(newProduct, nil).
 			Once()
 
 		service := NewService(mockRep)
 
-		productCriado, err := service.Store(
-			newProduct.Name,
-			newProduct.Type,
-			newProduct.Count,
-			newProduct.Price,
-		)
+		productCriado, err := service.Store(pdRequest)
 
 		assert.Nil(t, err)
 		assert.ObjectsAreEqual(newProduct, productCriado)
@@ -151,25 +148,16 @@ func TestServiceStore(t *testing.T) {
 	t.Run("test de integração service e repository caso de error", func(t *testing.T) {
 		productVazio := domain.Produtos{}
 		expectedErr := fmt.Errorf("falha ao criar um novo produto")
-		mockRep.On("LastID").Return(1, nil).Once()
+
 		mockRep.On("Store",
-			mock.AnythingOfType("int"),
-			mock.AnythingOfType("string"),
-			mock.AnythingOfType("string"),
-			mock.AnythingOfType("int"),
-			mock.AnythingOfType("float64"),
+			mock.AnythingOfType("domain.Produtos"),
 		).
 			Return(productVazio, expectedErr).
 			Once()
 
 		service := NewService(mockRep)
 
-		_, err := service.Store(
-			"Notbook",
-			"informatica",
-			1,
-			56545.45,
-		)
+		_, err := service.Store(pdRequest)
 		assert.NotNil(t, err)
 		assert.ObjectsAreEqual(expectedErr, err)
 		mockRep.AssertExpectations(t)
@@ -178,27 +166,16 @@ func TestServiceStore(t *testing.T) {
 	t.Run("test de integração service e repository caso de error no LastID", func(t *testing.T) {
 		productVazio := domain.Produtos{}
 		expectedErr := fmt.Errorf("falha ao criar um novo produto")
-		mockRep.On("LastID").
-			Return(0, errors.New("não há sections registrados")).
-			Once()
+
 		mockRep.On("Store",
-			mock.AnythingOfType("int"),
-			mock.AnythingOfType("string"),
-			mock.AnythingOfType("string"),
-			mock.AnythingOfType("int"),
-			mock.AnythingOfType("float64"),
+			mock.AnythingOfType("domain.Produtos"),
 		).
 			Return(productVazio, expectedErr).
 			Once()
 
 		service := NewService(mockRep)
 
-		_, err := service.Store(
-			"Notbook",
-			"informatica",
-			1,
-			56545.45,
-		)
+		_, err := service.Store(pdRequest)
 
 		assert.NotNil(t, err)
 		assert.ObjectsAreEqual(expectedErr, err)

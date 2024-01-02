@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"web-service-gin/internal/products/domain"
+	"go-web-service/internal/products/domain"
 
-	"web-service-gin/pkg/regras"
-	"web-service-gin/pkg/web"
+	"go-web-service/pkg/regras"
+	"go-web-service/pkg/web"
 
 	"github.com/gin-gonic/gin"
 )

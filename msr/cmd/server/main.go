@@ -5,11 +5,11 @@ import (
 	"log"
 	"os"
 
-	"web-service-gin/cmd/server/docs"
-	productController "web-service-gin/internal/products/controller"
-	"web-service-gin/internal/products/infra"
-	productRepository "web-service-gin/internal/products/repository/mariadb"
-	productService "web-service-gin/internal/products/service"
+	"go-web-service/cmd/server/docs"
+	productController "go-web-service/internal/products/controller"
+	"go-web-service/internal/products/infra"
+	productRepository "go-web-service/internal/products/repository/mariadb"
+	productService "go-web-service/internal/products/service"
 
 	"github.com/gin-gonic/gin"
 
@@ -21,6 +21,22 @@ import (
 func TokenAuthMiddleware() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		context.JSON(200, gin.H{"message": "oi"})
+	}
+}
+
+func corsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+		//
+
+		c.Next()
 	}
 }
 
@@ -40,6 +56,8 @@ func main() {
 		log.Fatal(err)
 	}
 	router := gin.Default()
+
+	router.Use(corsMiddleware())
 
 	rep := productRepository.NewMariaDBRepository(infra.Connect())
 	service := productService.NewService(rep)

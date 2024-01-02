@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	productController "web-service-gin/internal/products/controller"
-	"web-service-gin/internal/products/domain"
-	"web-service-gin/internal/products/domain/mocks"
-	"web-service-gin/pkg/web"
+	productController "go-web-service/internal/products/controller"
+	"go-web-service/internal/products/domain"
+	"go-web-service/internal/products/domain/mocks"
+	"go-web-service/pkg/web"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

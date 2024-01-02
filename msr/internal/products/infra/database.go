@@ -3,7 +3,6 @@ package infra
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -22,7 +21,7 @@ func settingsDatabaseCennection() string {
 func Connect() *sql.DB {
 	conn, err := sql.Open("mysql", settingsDatabaseCennection())
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	return conn
 }

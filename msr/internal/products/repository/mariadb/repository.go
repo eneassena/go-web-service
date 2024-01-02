@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"errors"
 
-	domain "web-service-gin/internal/products/domain"
+	domain "go-web-service/internal/products/domain"
 )
 
 type mariaDBRepository struct {

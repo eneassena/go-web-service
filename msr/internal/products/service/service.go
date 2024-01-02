@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"web-service-gin/internal/products/domain"
+	"go-web-service/internal/products/domain"
 )
 
 // endpoint <-> controller <-> service <-> repository <-> db

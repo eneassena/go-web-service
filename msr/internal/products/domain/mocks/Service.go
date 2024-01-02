@@ -4,7 +4,7 @@ package mocks
 
 import (
 	context "context"
-	domain "web-service-gin/internal/products/domain"
+	domain "go-web-service/internal/products/domain"
 
 	mock "github.com/stretchr/testify/mock"
 )

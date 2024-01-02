@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"testing"
 
-	domain "web-service-gin/internal/products/domain"
+	domain "go-web-service/internal/products/domain"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"

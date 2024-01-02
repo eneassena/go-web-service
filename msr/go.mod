@@ -1,4 +1,4 @@
-module web-service-gin
+module go-web-service
 
 go 1.18
 

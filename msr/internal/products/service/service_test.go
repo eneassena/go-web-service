@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"testing"
 
-	domain "web-service-gin/internal/products/domain"
-	mocks "web-service-gin/internal/products/domain/mocks"
+	domain "go-web-service/internal/products/domain"
+	mocks "go-web-service/internal/products/domain/mocks"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

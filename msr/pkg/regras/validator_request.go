@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"strings"
 
-	// model_products "web-service-gin/internal/products/model"
-	"web-service-gin/pkg/web"
+	// model_products "go-web-service/internal/products/model"
+	"go-web-service/pkg/web"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
